@@ -1,0 +1,53 @@
+﻿@* This acts as a parent for the modal components.
+		Design goals:
+			* Targetted to be a friendly wrapper for nested components ("subforms").
+			* Uses the Bootstrap CSS provided with Blazor, but without writing custom JavaScript.
+			* Designed to "read like html" in the parent component.
+			* Intended for use with the other components in the Shared\ModalForm\ directory. (But can also be used to wrap any valid content.)
+
+	See ModalExample for the syntax of how these are called.
+*@
+
+<div class="modal @cssModalClass" tabindex="-1" role="dialog" style="display:@cssModalDisplay; overflow-y: auto;">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">@ModalTitle</h5>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" @onclick="Close" />
+			</div>
+				@ChildContent
+		</div>
+	</div>
+</div>
+
+<div class="modal-backdrop fade show"></div>
+
+@code {
+	[Parameter] public RenderFragment ChildContent { get; set; }
+	[Parameter] public EventCallback<bool> OnClose { get; set; }
+
+	[Parameter] public string ModalTitle { get; set; } = "Modal Title";
+
+	private string cssModalDisplay = "none;";
+	private string cssModalClass = string.Empty;
+	private bool cssShowBackdrop = false;
+
+	public async Task Close()
+	{
+		@* Setting these CSS parameters to empty strings will hide the modal. 
+		If the the parent page manages visibility then these are redundant. We're setting them anyway to keep things flexible and clean.*@
+		cssModalDisplay = "none";
+		cssModalClass = string.Empty;
+		cssShowBackdrop = false;
+
+		await OnClose.InvokeAsync(false);
+	}
+
+	protected override void OnInitialized()
+		{
+		cssModalDisplay = "block";
+		cssModalClass = "show";
+		cssShowBackdrop = true;
+		}
+
+}

@@ -1,0 +1,21 @@
+﻿
+
+<br />
+<div class="row">
+	<div class="col">
+		@if (SearchPending)
+		{
+			<div class="loader" />
+		}
+		@else if (SearchPending == false)
+		{
+			<p class="">Make a selection in the Search Bar</p>
+		}
+
+	</div>
+</div>
+
+
+@code {
+	[Parameter] public bool SearchPending { get; set; }
+}

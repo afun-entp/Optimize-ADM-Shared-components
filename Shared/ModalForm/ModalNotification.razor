@@ -1,0 +1,25 @@
+﻿
+<div class="row">
+	<div class="col alert alert-warning">
+		<span>@NotificationMessage</span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col">
+		<button type="button" class="btn btn-primary" style="margin-bottom: 1em" @onclick="() => HandleAcknowledge(true)">Ok</button>
+		<button type="button" class="btn btn-danger" style="margin-bottom: 1em" @onclick="() => HandleAcknowledge(false)">Cancel</button>
+	</div>
+</div>
+
+@code {
+	[Parameter] public string NotificationMessage { get; set; } = "";
+	[Parameter] public EventCallback<bool> OnConfirm { get; set; }
+
+	private async Task HandleAcknowledge(bool confirmed)
+	{
+		// confirmed will be true if the user clicked the "Ok" button, false if they clicked "Cancel"
+		await OnConfirm.InvokeAsync(confirmed);
+	}
+
+}

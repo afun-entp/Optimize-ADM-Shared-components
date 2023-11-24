@@ -1,0 +1,68 @@
+﻿@page "/Shared/ModalExample"
+
+
+<h3>Modal Notification Example - Using Bootstrap CSS </h3>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col">
+			@status
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<button class="w3-button w3-blue" @onclick="() => HandleShowModal() ">Open Modal</button>
+		</div>
+	</div>
+
+	@if (showModal)
+	{
+		<ModalForm ModalTitle="my Modal Title" OnClose="HandleCloseModal">
+			<ModalFormBody>
+				<ModalNotification NotificationMessage="Are you sure you want to do this?" OnConfirm="HandleConfirmation" />
+			</ModalFormBody>
+			<ModalFormFooter>
+				<label>a simple footer</label>
+			</ModalFormFooter>
+		</ModalForm>
+	}
+
+</div>
+
+
+
+@code {
+	private bool showModal = false;
+	
+	private string status = "";
+
+	private void HandleShowModal()
+	{
+		showModal = true;	
+	}
+
+	private void HandleHideAllModals()
+	{
+		showModal = false;
+	}
+
+	private void HandleCloseModal()
+	{
+		// The user clicked the "X" button in <ModalForm>, so we'll treat it as a cancellation
+		HandleConfirmation(false);
+	}
+
+	private void HandleConfirmation(bool confirmed)
+	{
+		if (confirmed)
+		{
+			status = "The last notification was Confirmed";
+		}
+		else
+		{
+			status = "The last notification was Cancelled";
+		}
+
+		HandleHideAllModals();
+	}
+}
